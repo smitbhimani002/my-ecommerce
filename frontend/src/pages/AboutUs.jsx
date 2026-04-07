@@ -76,7 +76,7 @@ const AboutUs = () => {
             title="location"
             width="100%"
             height="100%"
-            frameBorder="0"
+          
             
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117530.98425331879!2d72.4988582!3d22.9927906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e9b31358fff27%3A0x8555186f45683b7a!2sCrabby%20Hunt%20%7C%20Genuine%20Leather%20Belt!5e0!3m2!1sen!2sin!4v1775557083717!5m2!1sen!2sin" >
           </iframe>
