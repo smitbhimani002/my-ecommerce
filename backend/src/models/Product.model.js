@@ -15,7 +15,7 @@ const productschema = mongoose.Schema(
       type: Number,
       required: true,
     },
-   
+
     variants: [
       {
         size: {
@@ -43,7 +43,7 @@ const productschema = mongoose.Schema(
 
     category: {
       type: String,
-      enum: ["Mens Wear", "Kids Wear", "Electronics", "Beauty", "Top Rated"],
+      // enum: ["Mens Wear", "Kids Wear", "Electronics", "Beauty", "Top Rated"],
       required: true,
     },
 

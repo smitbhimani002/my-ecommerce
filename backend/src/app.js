@@ -5,6 +5,10 @@ import { errorHandler } from "./middleware/error.middleware.js";
 import UserRouter from "./routes/user.route.js";
 import CartRouter from "./routes/cart.route.js";
 import AdminRouter from "./routes/admin.route.js";
+import ProductRouter from "./routes/product.route.js";
+import CouponRouter from "./routes/coupon.route.js";
+
+
 
 const app = express();
 
@@ -26,6 +30,8 @@ app.use(cookieParser());
 app.use("/api/auth", UserRouter);
 app.use("/api/cart", CartRouter);
 app.use("/api/admin", AdminRouter);
+app.use("/api/products", ProductRouter);
+app.use("/api/coupons", CouponRouter);
 
 
 // last middleware

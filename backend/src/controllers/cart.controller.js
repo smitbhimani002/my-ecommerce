@@ -3,8 +3,7 @@ import { Cart } from "../models/cart.model.js";
 
 export const addToCart = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const { id, name, price, image,size,color} = req.body;
-  
+  const { id, name, price, image, size, color } = req.body;
 
   let cart = await Cart.findOne({ user: userId });
 
@@ -17,9 +16,12 @@ export const addToCart = asyncHandler(async (req, res) => {
 
   const productId = id.toString();
 
-    const existingItem = cart.items.find(
-      (item) => item.productId === productId && item.size === size && item.color===color, 
-    );
+  const existingItem = cart.items.find(
+    (item) =>
+      item.productId === productId &&
+      item.size === size &&
+      item.color === color,
+  );
 
   if (existingItem) {
     existingItem.quantity += 1;
@@ -40,7 +42,6 @@ export const addToCart = asyncHandler(async (req, res) => {
   res.status(200).json(cart);
 });
 
-
 export const getCart = asyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id });
 
@@ -48,7 +49,7 @@ export const getCart = asyncHandler(async (req, res) => {
 });
 
 export const updateQuantity = asyncHandler(async (req, res) => {
-  const { productId,size,color, action } = req.body;
+  const { productId, size, color, action } = req.body;
   const cart = await Cart.findOne({ user: req.user._id });
 
   const item = cart.items.find(
@@ -70,17 +71,21 @@ export const updateQuantity = asyncHandler(async (req, res) => {
 });
 
 export const removeItem = asyncHandler(async (req, res) => {
-  const { productId, size,color } = req.body; 
+  const { productId, size, color } = req.body;
 
-const cart = await Cart.findOne({ user: req.user._id });
-
+  const cart = await Cart.findOne({ user: req.user._id });
 
   if (!cart) {
     return res.status(404).json({ message: "Cart not found" });
   }
-  
+
   cart.items = cart.items.filter(
-    (item) => !(item.productId === productId && item.size === size && item.color === color)
+    (item) =>
+      !(
+        item.productId === productId &&
+        item.size === size &&
+        item.color === color
+      ),
   );
 
   await cart.save();

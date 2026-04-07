@@ -28,6 +28,19 @@ const orderSchema = new mongoose.Schema(
       pincode: String,
     },
 
+    couponCode: {
+      type: String,
+      default: null,
+    },
+    couponDiscount: {
+      type: Number,
+      default: 0,
+    },
+    subtotal: {
+      type: Number,
+      default: 0,
+    },
+
     totalAmount: {
       type: Number,
       required: true,
@@ -46,7 +59,7 @@ const orderSchema = new mongoose.Schema(
 
     orderStatus: {
       type: String,
-      enum: ["Processing", "Shipped", "Delivered"],
+      enum: ["Processing", "Shipped", "Delivered", "Cancelled"],
       default: "Processing",
     },
 
