@@ -71,7 +71,7 @@ const AboutUs = () => {
           Our Location
         </h2>
 
-        <div className="w-full h-[400px] rounded-xl overflow-hidden shadow">
+        <div className="w-full h-100 rounded-xl overflow-hidden shadow">
           <iframe
             title="location"
             width="100%"

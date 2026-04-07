@@ -90,7 +90,7 @@ function Navbar() {
               placeholder="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="hidden sm:block w-[200px] border rounded-3xl px-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="hidden sm:block w-50 border rounded-3xl px-4 focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
           </form>
 
@@ -125,7 +125,7 @@ function Navbar() {
             </button>
           ) : (
             <Link to="/Login">
-              <CgProfile className="w-[40px] h-[50px] cursor-pointer" />
+              <CgProfile className="w-10 h-12.5 cursor-pointer" />
             </Link>
           )}
 
@@ -220,7 +220,7 @@ function Navbar() {
 
           <li className="relative group cursor-pointer">
             <span className="hover:text-orange-500">Trending Items</span>
-            <ul className="md:absolute hidden md:group-hover:block shadow-md mt-2 w-40 z-[99] bg-white text-center">
+            <ul className="md:absolute hidden md:group-hover:block shadow-md mt-2 w-40 z-99 bg-white text-center">
               <li className="py-2 hover:bg-orange-100">New Arrivals</li>
               <li className="py-2 hover:bg-orange-100">Best Sellers</li>
             </ul>
