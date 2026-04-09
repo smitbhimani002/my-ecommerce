@@ -5,6 +5,8 @@ import { Product } from "../models/Product.model.js";
 import bcrypt from "bcryptjs";
 import { Otp } from "../models/otp.model.js";
 import { sendEmail } from "../utils/sendMail.js";
+import cloudinary from "../../config/cloudinary.js";
+import streamifier from "streamifier";
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -135,7 +137,12 @@ export const verifyOtp = asyncHandler(async (req, res) => {
       success: true,
       message: "Login successful",
       user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
         role: user.role,
+        profilePic: user.profilePic,
+        createdAt: user.createdAt,
       },
     });
 });
@@ -194,5 +201,79 @@ export const searchProducts = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     products,
+  });
+});
+
+export const updateProfile = asyncHandler(async (req, res) => {
+  const { username, email } = req.body;
+  const userId = req.user._id;
+
+  // Check if email is already taken by another user
+  if (email && email !== req.user.email) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      throw new ApiError(409, "Email is already in use");
+    }
+  }
+
+  const updateData = {};
+  if (username) updateData.username = username;
+  if (email) updateData.email = email;
+
+  // Handle profile pic upload
+  if (req.file) {
+    const uploadFromBuffer = () => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "profile_pics" },
+          (error, result) => {
+            if (error) {
+              reject(new ApiError(500, "Cloudinary upload failed"));
+            } else {
+              resolve(result);
+            }
+          },
+        );
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+    };
+
+    const result = await uploadFromBuffer();
+    updateData.profilePic = result.secure_url;
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+    new: true,
+    runValidators: true,
+  }).select("-password");
+
+  if (!updatedUser) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
+    user: updatedUser,
+  });
+});
+
+export const removeProfilePic = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { profilePic: "" },
+    { new: true }
+  ).select("-password");
+
+  if (!updatedUser) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Profile picture removed",
+    user: updatedUser,
   });
 });
