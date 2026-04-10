@@ -54,6 +54,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   // generate otp
   const otp = Math.floor(100000 + Math.random() * 900000);
+  console.log(`Generated OTP for ${email} is : ${otp}`);
 
   // // hase otp
   // const hashedOtp  = await bcrypt.hash(otp.toString(), 10);

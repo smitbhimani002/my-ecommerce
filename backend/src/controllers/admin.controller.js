@@ -357,9 +357,6 @@ export const paymentcheckout = asyncHandler(async (req, res) => {
     statusTimeline: [{ status: "Processing", date: new Date() }],
   });
 
-  console.log("User ID:", userId);
-  console.log("Order saved:", order);
-
   // ==================== UPDATE COUPON USAGE ====================
   if (coupon) {
     coupon.usedCount += 1;
@@ -663,6 +660,6 @@ export const getSingleProduct = asyncHandler(async (req, res) => {
 });
 
 export const getNumberOfProduct = asyncHandler(async (req, res) => {
-  const totalNUmberOfProduct = await Product.findById(categpry);
+  const totalNUmberOfProduct = await Product.findById(category);
   totalNUmberOfProduct;
 });

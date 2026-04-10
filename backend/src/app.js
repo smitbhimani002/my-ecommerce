@@ -7,7 +7,8 @@ import CartRouter from "./routes/cart.route.js";
 import AdminRouter from "./routes/admin.route.js";
 import ProductRouter from "./routes/product.route.js";
 import CouponRouter from "./routes/coupon.route.js";
-
+import WishlistRouter from "./routes/wishlist.route.js";
+import chatRoutes from "./routes/chat.route.js";
 
 
 const app = express();
@@ -32,6 +33,8 @@ app.use("/api/cart", CartRouter);
 app.use("/api/admin", AdminRouter);
 app.use("/api/products", ProductRouter);
 app.use("/api/coupons", CouponRouter);
+app.use("/api/wishlist", WishlistRouter);
+app.use("/api/chat", chatRoutes);
 
 
 // last middleware
