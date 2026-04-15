@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
-  const [filterStatus,setFilterStatus] = useState("All");
-   const navigate = useNavigate();
+  const [filterStatus, setFilterStatus] = useState("All");
+  const navigate = useNavigate();
 
   const fetchOrders = async () => {
-    const res = await axios.get("http://localhost:3000/api/admin/orders", {
+    const res = await axios.get("process.env.BASE_URL/api/admin/orders", {
       withCredentials: true,
     });
 
@@ -20,19 +20,18 @@ const ManageOrders = () => {
 
   const updateStatus = async (id, status) => {
     await axios.put(
-      `http://localhost:3000/api/admin/orders/${id}`,
+      `process.env.BASE_URL/api/admin/orders/${id}`,
       { status },
       { withCredentials: true },
     );
 
-    fetchOrders();  
+    fetchOrders();
   };
 
-    const filteredOrders =
-      filterStatus === "All"
-        ? orders
-        : orders.filter((order) => order.orderStatus === filterStatus);
-
+  const filteredOrders =
+    filterStatus === "All"
+      ? orders
+      : orders.filter((order) => order.orderStatus === filterStatus);
 
   return (
     <div>
@@ -50,7 +49,7 @@ const ManageOrders = () => {
           <option value="Delivered">Delivered</option>
           <option value="Cancelled">Cancelled</option>
         </select>
-      </div>                          
+      </div>
 
       <div className="bg-white shadow rounded-lg overflow-x-auto">
         <table className="w-full text-left">

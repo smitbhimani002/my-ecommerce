@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
 import {
   LineChart,
   Line,
@@ -9,17 +8,14 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  
 } from "recharts";
-
-
 
 export default function AdminDashboard() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
-      const res = await axios.get("http://localhost:3000/api/admin/dashboard", {
+      const res = await axios.get("process.env.BASE_URL/api/admin/dashboard", {
         withCredentials: true,
       });
 
@@ -35,9 +31,8 @@ export default function AdminDashboard() {
 
   // Weekly Sales Format
   const weeklySales = data.weeklySales.map((item) => ({
-  date : `${item._id.day}/${item._id.month}`,
+    date: `${item._id.day}/${item._id.month}`,
     revenue: item.revenue,
-    
   }));
 
   // Top Products Format
@@ -45,8 +40,6 @@ export default function AdminDashboard() {
     name: item._id,
     sold: item.sold,
   }));
-
-
 
   return (
     <div>
@@ -144,7 +137,6 @@ export default function AdminDashboard() {
         >
           <div>
             <p className="font-semibold">{p._id.name}</p>
-           
           </div>
 
           <span className="font-bold text-black">{p.sold} sold</span>

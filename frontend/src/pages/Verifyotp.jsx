@@ -16,7 +16,7 @@ const VerifyOtp = () => {
     setError("");
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/verify-otp",
+        "process.env.BASE_URL/api/auth/verify-otp",
         { email, otp },
         { withCredentials: true },
       );

@@ -23,7 +23,7 @@ export default function Orders() {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/admin/my-orders",
+          "process.env.BASE_URL/api/admin/my-orders",
           {
             withCredentials: true,
           },

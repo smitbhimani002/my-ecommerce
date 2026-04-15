@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { s } from "framer-motion/client";
 
@@ -8,7 +8,7 @@ const AddProduct = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/admin/categories")
+      .get("process.env.BASE_URL/api/admin/categories")
       .then((res) => setCategories(res.data.categories))
       .catch((error) => console.log(error));
   }, []);
@@ -42,20 +42,17 @@ const AddProduct = () => {
     setVariants(updated);
   };
 
-  
   const addVariantField = () => {
     setVariants([...variants, { size: "M", color: "red", stock: 0 }]);
   };
-
 
   const removeVariantField = (index) => {
     const updated = variants.filter((_, i) => i !== index);
     setVariants(updated);
   };
 
-
   const totalStock = variants.reduce((sum, item) => sum + item.stock, 0);
-  
+
   // categort check
 
   const isClothingCategory =
@@ -85,11 +82,11 @@ const AddProduct = () => {
 
       // data.append("totalStock", JSON.stringify(formData.color));
 
-      await axios.post("http://localhost:3000/api/admin/add-product", data, {
+      await axios.post("process.env.BASE_URL/api/admin/add-product", data, {
         withCredentials: true,
       });
 
-      console.log("http://localhost:3000/api/admin/add-product");
+      console.log("process.env.BASE_URL/api/admin/add-product");
       alert("Product Added Successfully ");
 
       // Reset form
@@ -351,6 +348,6 @@ const AddProduct = () => {
       </div>
     </div>
   );
-};;
+};
 
 export default AddProduct;

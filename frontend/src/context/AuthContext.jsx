@@ -7,19 +7,18 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
- 
+
   // 🔥 This runs on page refresh
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/auth/me", {
+        const res = await axios.get("process.env.BASE_URL/api/auth/me", {
           withCredentials: true,
         });
 
         if (res.data.success) {
           setIsLoggedIn(true);
-           setUser(res.data.user);
-           
+          setUser(res.data.user);
         }
       } catch (error) {
         setIsLoggedIn(false);

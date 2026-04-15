@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 import { useEffect } from "react";
 import Chart from "react-apexcharts";
 
-
 export default function AddCategory() {
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
@@ -15,7 +14,7 @@ export default function AddCategory() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/admin/categories")
+      .get("process.env.BASE_URL/api/admin/categories")
       .then((res) => {
         console.log(res.data);
         setCategories(res.data.categories);
@@ -23,11 +22,9 @@ export default function AddCategory() {
       .catch((err) => console.log(err));
   }, []);
 
-
-
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/admin/category-chart")
+      .get("process.env.BASE_URL/api/admin/category-chart")
       .then((res) => {
         setChartData(res.data.categories);
         setTotalStock(res.data.total);
@@ -37,7 +34,6 @@ export default function AddCategory() {
 
   const series = chartData.map((item) => item.count);
   const labels = chartData.map((item) => item.name);
-
 
   const options = {
     chart: {
@@ -83,7 +79,7 @@ export default function AddCategory() {
 
     if (!confirm.isConfirmed) return;
 
-    await axios.delete(`http://localhost:3000/api/admin/category/${id}`, {
+    await axios.delete(`process.env.BASE_URL/api/admin/category/${id}`, {
       withCredentials: true,
     });
 
@@ -93,7 +89,7 @@ export default function AddCategory() {
   const updateCategory = async (id) => {
     try {
       await axios.put(
-        `http://localhost:3000/api/admin/category/${id}`,
+        `process.env.BASE_URL/api/admin/category/${id}`,
         { name: editName },
         { withCredentials: true },
       );
@@ -123,7 +119,7 @@ export default function AddCategory() {
     e.preventDefault();
     try {
       await axios.post(
-        "http://localhost:3000/api/admin/category",
+        "process.env.BASE_URL/api/admin/category",
         { name },
         { withCredentials: true },
       );
@@ -258,6 +254,3 @@ export default function AddCategory() {
     </div>
   );
 }
-
-
-

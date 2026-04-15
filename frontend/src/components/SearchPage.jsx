@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductGrid from "../components/ProductGrid";
 
-
 export default function SearchPage() {
   const { query } = useParams();
   const [products, setProducts] = useState([]);
@@ -11,13 +10,10 @@ export default function SearchPage() {
   useEffect(() => {
     const fetchSearch = async () => {
       const res = await axios.get(
-        `http://localhost:3000/api/products/search?query=${query}`,
-            
+        `process.env.BASE_URL/api/products/search?query=${query}`,
       );
 
-      
       setProducts(res.data.products);
-  
     };
 
     fetchSearch();

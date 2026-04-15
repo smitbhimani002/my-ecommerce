@@ -1,4 +1,3 @@
-
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -13,7 +12,6 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-
   useEffect(() => {
     const fetchInitial = async () => {
       setProducts([]);
@@ -22,14 +20,13 @@ export default function CategoryPage() {
       setLoading(true);
 
       const res = await axios.get(
-        `http://localhost:3000/api/products/category/${encodedname}`,
+        `process.env.BASE_URL/api/products/category/${encodedname}`,
       );
 
       const data = res.data.products;
 
       setProducts(data);
 
-      
       if (data.length > 0) {
         setLastId(data[data.length - 1]._id);
       } else {
@@ -42,32 +39,29 @@ export default function CategoryPage() {
     fetchInitial();
   }, [name]);
 
-  //  Scroll 
+  //  Scroll
   const fetchProduct = async () => {
     if (loading || !hasMore) return;
 
     setLoading(true);
 
     const res = await axios.get(
-      `http://localhost:3000/api/products/category/${encodedname}?lastId=${lastId || ""}`,
+      `process.env.BASE_URL/api/products/category/${encodedname}?lastId=${lastId || ""}`,
     );
 
     const newProducts = res.data.products;
 
     if (newProducts.length === 0) {
-      setHasMore(false); 
+      setHasMore(false);
     } else {
       setProducts((prev) => [...prev, ...newProducts]);
 
-      
       setLastId(newProducts[newProducts.length - 1]._id);
     }
 
     setLoading(false);
   };
 
-
-  
   // Infinite scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -75,7 +69,6 @@ export default function CategoryPage() {
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 100;
 
-     
       if (bottom && !loading && hasMore) {
         fetchProduct();
       }

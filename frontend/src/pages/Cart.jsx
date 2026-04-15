@@ -56,7 +56,7 @@ const Cart = () => {
     setCouponsLoading(true);
     try {
       const res = await axios.get(
-        "http://localhost:3000/api/coupons/user/available",
+        "process.env.BASE_URL/api/coupons/user/available",
         {
           withCredentials: true,
         },

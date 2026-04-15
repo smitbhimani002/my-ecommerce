@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const CartContext = createContext();
 
@@ -32,7 +32,7 @@ export const CartProvider = ({ children }) => {
 
   const fetchWishlist = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/wishlist", {
+      const res = await axios.get("process.env.BASE_URL/api/wishlist", {
         withCredentials: true,
       });
       const products = res.data.wishlist?.products || [];
@@ -47,7 +47,7 @@ export const CartProvider = ({ children }) => {
 
   const fetchCart = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/cart", {
+      const res = await axios.get("process.env.BASE_URL/api/cart", {
         withCredentials: true,
       });
       setCartItems(res.data.items || []);
@@ -56,49 +56,46 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-
   const addToCart = async (product) => {
     try {
       await axios.post(
-        "http://localhost:3000/api/cart/add",
+        "process.env.BASE_URL/api/cart/add",
         {
-          
           id: product._id,
           name: product.name,
           price: product.price,
           image: product.image,
           size: product.size,
-          color:product.color,
+          color: product.color,
         },
         { withCredentials: true },
       );
 
-    
-      fetchCart(); 
+      fetchCart();
     } catch (error) {
       toast.error("Failed to add product");
       console.log(error);
     }
   };
 
-  const increaseQty = async (id, size,color) => {
+  const increaseQty = async (id, size, color) => {
     await axios.post(
-      "http://localhost:3000/api/cart/update",
-      { productId: id, size,color, action: "inc" },
+      "process.env.BASE_URL/api/cart/update",
+      { productId: id, size, color, action: "inc" },
       { withCredentials: true },
     );
     toast.success("Product increased in cart ");
     fetchCart();
-    
+
     if (appliedCoupon) {
       clearCoupon();
     }
   };
 
-  const decreaseQty = async (id,size,color) => {
+  const decreaseQty = async (id, size, color) => {
     await axios.post(
-      "http://localhost:3000/api/cart/update",
-      { productId: id, size,color, action: "dec" },
+      "process.env.BASE_URL/api/cart/update",
+      { productId: id, size, color, action: "dec" },
       { withCredentials: true },
     );
     toast.success("Product decreased in cart ");
@@ -108,10 +105,10 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeItem = async (id,size,color) => {
+  const removeItem = async (id, size, color) => {
     await axios.post(
-      "http://localhost:3000/api/cart/remove",
-      { productId: id,size ,color},
+      "process.env.BASE_URL/api/cart/remove",
+      { productId: id, size, color },
       { withCredentials: true },
     );
     toast.success("Product removed from cart ");
@@ -127,9 +124,9 @@ export const CartProvider = ({ children }) => {
     setWishlistLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/wishlist/add",
+        "process.env.BASE_URL/api/wishlist/add",
         { productId },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       // Update local state optimistically
       const products = res.data.wishlist?.products || [];
@@ -148,9 +145,9 @@ export const CartProvider = ({ children }) => {
     setWishlistLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/wishlist/remove",
+        "process.env.BASE_URL/api/wishlist/remove",
         { productId },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       // Update local state
       const products = res.data.wishlist?.products || [];
@@ -158,7 +155,9 @@ export const CartProvider = ({ children }) => {
       setWishlistIds(new Set(products.map((p) => p._id)));
       toast.success("Removed from Wishlist");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to remove from wishlist");
+      toast.error(
+        error.response?.data?.message || "Failed to remove from wishlist",
+      );
     } finally {
       setWishlistLoading(false);
     }
@@ -176,7 +175,7 @@ export const CartProvider = ({ children }) => {
     return wishlistIds.has(productId);
   };
 
-  //COUPON FUNCTIONS 
+  //COUPON FUNCTIONS
   const applyCoupon = async (code) => {
     if (!code || code.trim() === "") {
       setCouponError("Please enter a coupon code");
@@ -198,9 +197,9 @@ export const CartProvider = ({ children }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/coupons/apply",
+        "process.env.BASE_URL/api/coupons/apply",
         { code: code.trim(), orderTotal: totalAmount },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       setAppliedCoupon({
@@ -208,9 +207,12 @@ export const CartProvider = ({ children }) => {
         discount: res.data.discount,
         finalAmount: res.data.finalAmount,
         couponId: res.data.couponId,
-      });3
+      });
+      3;
       setCouponError("");
-      toast.success(`Coupon "${res.data.couponCode}" applied! You save ₹${res.data.discount}`);
+      toast.success(
+        `Coupon "${res.data.couponCode}" applied! You save ₹${res.data.discount}`,
+      );
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to apply coupon";
       setCouponError(msg);
@@ -233,7 +235,7 @@ export const CartProvider = ({ children }) => {
     setTimeout(async () => {
       try {
         const res = await axios.post(
-          "http://localhost:3000/api/admin/checkout",
+          "process.env.BASE_URL/api/admin/checkout",
           {
             paymentMethod: "Card",
             couponCode: appliedCoupon?.code || null,
@@ -243,7 +245,9 @@ export const CartProvider = ({ children }) => {
         );
 
         if (res.data.order?.couponDiscount > 0) {
-          toast.success(`Payment Successful 🎉 You saved ₹${res.data.order.couponDiscount}!`);
+          toast.success(
+            `Payment Successful 🎉 You saved ₹${res.data.order.couponDiscount}!`,
+          );
         } else {
           toast.success("Payment Successful 🎉");
         }
@@ -327,6 +331,6 @@ export const CartProvider = ({ children }) => {
       {children}
     </CartContext.Provider>
   );
-};;
+};
 
 export const useCart = () => useContext(CartContext);

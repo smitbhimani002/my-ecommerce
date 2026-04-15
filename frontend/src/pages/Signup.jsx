@@ -36,7 +36,7 @@ const Signup = () => {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:3000/api/auth/register", // change if needed
+        "process.env.BASE_URL/api/auth/register", // change if needed
         {
           username: formData.username,
           email: formData.email,

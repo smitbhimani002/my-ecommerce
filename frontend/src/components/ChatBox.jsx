@@ -17,13 +17,13 @@ const ChatBot = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:3000/api/chat", {
+      const res = await axios.post("process.env.BASE_URL/api/chat", {
         message: input,
       });
 
       const botMsg = { type: "bot", text: res.data.reply };
       setMessages((prev) => [...prev, botMsg]);
-      
+
       // Accumulate products from all questions instead of replacing
       if (res.data.products && res.data.products.length > 0) {
         setAllProducts((prev) => [...prev, ...res.data.products]);
@@ -52,11 +52,7 @@ const ChatBot = () => {
           className="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transition transform hover:scale-110"
           title="Open Chat"
         >
-          <svg
-            className="w-8 h-8"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
             <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
           </svg>
         </button>
@@ -121,8 +117,14 @@ const ChatBot = () => {
             <div className="bg-white text-gray-800 px-4 py-2 rounded-2xl rounded-bl-none border border-gray-200">
               <div className="flex gap-1">
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                <div
+                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  style={{ animationDelay: "0.1s" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  style={{ animationDelay: "0.2s" }}
+                ></div>
               </div>
             </div>
           </div>
@@ -133,7 +135,9 @@ const ChatBot = () => {
       {allProducts.length > 0 && (
         <div className="border-t border-gray-200 bg-white p-3 max-h-40 overflow-y-auto">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-xs font-bold text-gray-600">📦 All Suggestions ({allProducts.length})</p>
+            <p className="text-xs font-bold text-gray-600">
+              📦 All Suggestions ({allProducts.length})
+            </p>
             <button
               onClick={() => setAllProducts([])}
               className="text-xs text-gray-500 hover:text-red-500 transition"

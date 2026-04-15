@@ -24,7 +24,7 @@ function Navbar() {
   // FETCH CATEGORIES
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/admin/categories")
+      .get("process.env.BASE_URL/api/admin/categories")
       .then((res) => {
         setCategories(res.data.categories);
       })
@@ -48,7 +48,7 @@ function Navbar() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:3000/api/auth/logout",
+        "process.env.BASE_URL/api/auth/logout",
         {},
         { withCredentials: true },
       );

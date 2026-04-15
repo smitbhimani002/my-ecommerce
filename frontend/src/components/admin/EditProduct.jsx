@@ -14,7 +14,7 @@ const EditProduct = () => {
     price: "",
     category: "",
     image: null,
-    totalStock: "", 
+    totalStock: "",
   });
 
   const [variants, setVariants] = useState([]);
@@ -26,7 +26,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       const res = await axios.get(
-        `http://localhost:3000/api/admin/product/${id}`,
+        `process.env.BASE_URL/api/admin/product/${id}`,
         { withCredentials: true },
       );
 
@@ -39,7 +39,7 @@ const EditProduct = () => {
         price: product.price,
         category: product.category,
         image: null,
-        totalStock: product.totalStock || "", 
+        totalStock: product.totalStock || "",
       });
 
       setVariants(product.variants || []);
@@ -48,7 +48,7 @@ const EditProduct = () => {
     fetchProduct();
   }, [id]);
 
-  // INPUT CHANGE 
+  // INPUT CHANGE
   const handleChange = (e) => {
     if (e.target.name === "image") {
       setFormData({ ...formData, image: e.target.files[0] });
@@ -57,14 +57,14 @@ const EditProduct = () => {
     }
   };
 
-  //VARIANT CHANGE 
+  //VARIANT CHANGE
   const handleVariantChange = (index, field, value) => {
     const updated = [...variants];
     updated[index][field] = field === "stock" ? Number(value) : value;
     setVariants(updated);
   };
 
-  // ADD / REMOVE VARIANT 
+  // ADD / REMOVE VARIANT
   const addVariantField = () => {
     setVariants([...variants, { size: "M", color: "red", stock: 0 }]);
   };
@@ -94,7 +94,6 @@ const EditProduct = () => {
       data.append("price", formData.price);
       data.append("category", formData.category);
 
-    
       if (isClothingCategory) {
         data.append("variants", JSON.stringify(variants));
       } else {
@@ -106,7 +105,7 @@ const EditProduct = () => {
         data.append("image", formData.image);
       }
 
-      await axios.put(`http://localhost:3000/api/admin/product/${id}`, data, {
+      await axios.put(`process.env.BASE_URL/api/admin/product/${id}`, data, {
         withCredentials: true,
       });
 
@@ -120,7 +119,6 @@ const EditProduct = () => {
     }
   };
 
-  
   return (
     <div className="min-h-screen bg-gray-100">
       <h2 className="text-2xl font-bold mb-6">Edit Product</h2>

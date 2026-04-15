@@ -1,36 +1,32 @@
-import {useParams} from  "react-router-dom";
-import { useEffect,useState } from "react";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function AdminOrderDetails() {
+  const { id } = useParams();
+  const [order, setOrder] = useState(null);
 
-
-    const {id}= useParams();
-    const[order,setOrder] = useState(null);
-
-useEffect(()=>{
-
-const fatchOrder = async()=>{
-
-try { 
-
-const res = await axios.get(`http://localhost:3000/api/admin/order/${id}`, {
-  withCredentials: true,
-});
-  setOrder(res.data.order);
-} catch (error) {
+  useEffect(() => {
+    const fatchOrder = async () => {
+      try {
+        const res = await axios.get(
+          `process.env.BASE_URL/api/admin/order/${id}`,
+          {
+            withCredentials: true,
+          },
+        );
+        setOrder(res.data.order);
+      } catch (error) {
         console.log(error);
       }
     };
 
     fatchOrder();
-
   }, [id]);
 
   if (!order) {
     return <p className="p-6">Loading...</p>;
   }
-
 
   return (
     <div className="p-6">
@@ -89,7 +85,7 @@ const res = await axios.get(`http://localhost:3000/api/admin/order/${id}`, {
 
             <div className="text-right">
               <p>
-                {item.quantity} × ${item.price} = {item.quantity *item.price }
+                {item.quantity} × ${item.price} = {item.quantity * item.price}
               </p>
             </div>
           </div>
@@ -97,12 +93,4 @@ const res = await axios.get(`http://localhost:3000/api/admin/order/${id}`, {
       </div>
     </div>
   );
-
 }
-
-
-
-
-
-
-  

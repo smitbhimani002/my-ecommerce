@@ -9,7 +9,7 @@ const Menwear = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/admin/getproducts")
+      .get("process.env.BASE_URL/api/admin/getproducts")
 
       .then((res) => {
         const ElectronicProduct = res.data.products.filter(
@@ -26,7 +26,6 @@ const Menwear = () => {
     <ProductGrid
       title="Electronic Collection"
       products={product}
-      
       currency="₹"
     />
   );

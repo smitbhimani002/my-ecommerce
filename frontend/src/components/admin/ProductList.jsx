@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -7,20 +6,18 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [search, setSearch] = useState("");
-const[categories,setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  const fetchCategories = async () => {
+    const res = await axios.get("process.env.BASE_URL/api/admin/categories");
 
-  const fetchCategories = async()=>{
-const res = await axios.get("http://localhost:3000/api/admin/categories");
-
-setCategories(res.data.categories);
-
+    setCategories(res.data.categories);
   };
   const fetchProducts = async () => {
     const res = await axios.get(
-      `http://localhost:3000/api/admin/getproducts?page=${page}&limit=6&category=${filterStatus}&search=${search}`, 
+      `process.env.BASE_URL/api/admin/getproducts?page=${page}&limit=6&category=${filterStatus}&search=${search}`,
       { withCredentials: true },
     );
 
@@ -28,26 +25,18 @@ setCategories(res.data.categories);
     setTotalPages(res.data.totalPages);
   };
 
-
-
-
-
   useEffect(() => {
     fetchProducts();
-  
-  }, [page, filterStatus, search]); 
+  }, [page, filterStatus, search]);
 
-
-  useEffect(()=>{
-
+  useEffect(() => {
     fetchCategories();
-  },[]);
-  
+  }, []);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
 
-    await axios.delete(`http://localhost:3000/api/admin/product/${id}`, {
+    await axios.delete(`process.env.BASE_URL/api/admin/product/${id}`, {
       withCredentials: true,
     });
 
@@ -59,10 +48,6 @@ setCategories(res.data.categories);
   const getTotalStock = (variants) => {
     return variants?.reduce((sum, v) => sum + v.stock, 0) || 0;
   };
-
-  
-
-
 
   return (
     <div>
@@ -83,7 +68,9 @@ setCategories(res.data.categories);
         >
           <option value="All">All Category</option>
           {categories.map((cat) => (
-            <option key={cat._id} value={cat.name}>{cat.name}</option>
+            <option key={cat._id} value={cat.name}>
+              {cat.name}
+            </option>
           ))}
         </select>
       </div>

@@ -50,7 +50,7 @@ const Profile = () => {
     try {
       setSaving(true);
       const res = await axios.put(
-        "http://localhost:3000/api/auth/update-profile",
+        "process.env.BASE_URL/api/auth/update-profile",
         formData,
         { withCredentials: true },
       );
@@ -76,7 +76,7 @@ const Profile = () => {
     try {
       setSaving(true);
       const res = await axios.put(
-        "http://localhost:3000/api/auth/update-profile",
+        "process.env.BASE_URL/api/auth/update-profile",
         fd,
         {
           withCredentials: true,
@@ -103,7 +103,7 @@ const Profile = () => {
     try {
       setSaving(true);
       const res = await axios.delete(
-        "http://localhost:3000/api/auth/remove-profile-pic",
+        "process.env.BASE_URL/api/auth/remove-profile-pic",
         { withCredentials: true },
       );
       if (res.data.success) {

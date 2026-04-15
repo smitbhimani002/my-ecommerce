@@ -30,21 +30,17 @@ const Login = () => {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        "process.env.BASE_URL/api/auth/login",
         formData,
         {
           withCredentials: true,
         },
       );
 
-     
-      
       if (res.data.success) {
-        localStorage.setItem("email", formData.email); 
+        localStorage.setItem("email", formData.email);
         navigate("/verify-otp");
       }
-    
-
     } catch (error) {
       setError(error.response?.data?.message || "Login failed");
     } finally {
