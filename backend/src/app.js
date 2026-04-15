@@ -17,7 +17,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://my-ecommerce-gbmb.vercel.app/",
+    origin: "http://localhost:5173",
     credentials: true,
   }),
 );
