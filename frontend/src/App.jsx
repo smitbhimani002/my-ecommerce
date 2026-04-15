@@ -14,7 +14,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import TopReted from "./components/TopReted.jsx";
 import Login from "./pages/Login.jsx";
-import Signup from "./pages/signup.jsx";
+import Signup from "./pages/Signup.jsx";
 import Electronic from "./components/Electonic.jsx";
 import Cart from "./pages/Cart";
 
