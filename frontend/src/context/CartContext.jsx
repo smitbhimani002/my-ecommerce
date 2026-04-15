@@ -16,6 +16,35 @@ export const CartProvider = ({ children }) => {
   const [appliedCoupon, setAppliedCoupon] = useState(null); // { code, discount, finalAmount, couponId }
   const [couponError, setCouponError] = useState("");
 
+  // Shipping Address state
+  const [shippingAddress, setShippingAddress] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    city: "",
+    pincode: "",
+  });
+
+  // Wishlist state
+  const [wishlist, setWishlist] = useState([]);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [wishlistIds, setWishlistIds] = useState(new Set()); // For quick lookup
+
+  const fetchWishlist = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/wishlist", {
+        withCredentials: true,
+      });
+      const products = res.data.wishlist?.products || [];
+      setWishlist(products);
+      // Create Set of IDs for quick lookup
+      setWishlistIds(new Set(products.map((p) => p._id)));
+    } catch {
+      setWishlist([]);
+      setWishlistIds(new Set());
+    }
+  };
+
   const fetchCart = async () => {
     try {
       const res = await axios.get("http://localhost:3000/api/cart", {
@@ -92,6 +121,61 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // WISHLIST FUNCTIONS
+  const addToWishlist = async (productId) => {
+    if (!productId) return;
+    setWishlistLoading(true);
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/wishlist/add",
+        { productId },
+        { withCredentials: true }
+      );
+      // Update local state optimistically
+      const products = res.data.wishlist?.products || [];
+      setWishlist(products);
+      setWishlistIds(new Set(products.map((p) => p._id)));
+      toast.success("Added to Wishlist ");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to add to wishlist");
+    } finally {
+      setWishlistLoading(false);
+    }
+  };
+
+  const removeFromWishlist = async (productId) => {
+    if (!productId) return;
+    setWishlistLoading(true);
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/wishlist/remove",
+        { productId },
+        { withCredentials: true }
+      );
+      // Update local state
+      const products = res.data.wishlist?.products || [];
+      setWishlist(products);
+      setWishlistIds(new Set(products.map((p) => p._id)));
+      toast.success("Removed from Wishlist");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to remove from wishlist");
+    } finally {
+      setWishlistLoading(false);
+    }
+  };
+
+  const toggleWishlist = async (productId) => {
+    if (wishlistIds.has(productId)) {
+      await removeFromWishlist(productId);
+    } else {
+      await addToWishlist(productId);
+    }
+  };
+
+  const isProductInWishlist = (productId) => {
+    return wishlistIds.has(productId);
+  };
+
   //COUPON FUNCTIONS 
   const applyCoupon = async (code) => {
     if (!code || code.trim() === "") {
@@ -153,6 +237,7 @@ export const CartProvider = ({ children }) => {
           {
             paymentMethod: "Card",
             couponCode: appliedCoupon?.code || null,
+            shippingAddress: shippingAddress,
           },
           { withCredentials: true },
         );
@@ -164,6 +249,13 @@ export const CartProvider = ({ children }) => {
         }
 
         clearCoupon();
+        setShippingAddress({
+          name: "",
+          phone: "",
+          address: "",
+          city: "",
+          pincode: "",
+        });
         window.location.reload();
       } catch (error) {
         if (error.response?.data?.message) {
@@ -178,8 +270,14 @@ export const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (isLoggedIn) fetchCart();
-    else setCartItems([]);
+    if (isLoggedIn) {
+      fetchCart();
+      fetchWishlist();
+    } else {
+      setCartItems([]);
+      setWishlist([]);
+      setWishlistIds(new Set());
+    }
   }, [isLoggedIn]);
 
   const totalAmount = cartItems.reduce(
@@ -214,6 +312,16 @@ export const CartProvider = ({ children }) => {
         couponError,
         applyCoupon,
         clearCoupon,
+        // Shipping Address
+        shippingAddress,
+        setShippingAddress,
+        // Wishlist
+        wishlist,
+        wishlistLoading,
+        addToWishlist,
+        removeFromWishlist,
+        toggleWishlist,
+        isProductInWishlist,
       }}
     >
       {children}

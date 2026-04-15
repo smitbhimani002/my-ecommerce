@@ -1,6 +1,7 @@
 import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { Heart } from "lucide-react";
 
 const ProductGrid = ({
   title,
@@ -9,7 +10,7 @@ const ProductGrid = ({
   showcolor = false,
   currency = "₹",
 }) => {
-  const { addToCart } = useCart();
+  const { addToCart, toggleWishlist, isProductInWishlist, wishlistLoading } = useCart();
   const [selectedSizes, setSelectedSizes] = useState({});
   const [selectedColors, setSelectedColors] = useState({});
 
@@ -24,8 +25,24 @@ const ProductGrid = ({
           {products.map((item) => (
             <div
               key={item._id}
-              className="bg-white rounded-2xl shadow-xl p-4 flex flex-col hover:scale-105 duration-300"
+              className="bg-white rounded-2xl shadow-xl p-4 flex flex-col hover:scale-105 duration-300 relative"
             >
+              {/* Wishlist Button */}
+              <button
+                onClick={() => toggleWishlist(item._id)}
+                disabled={wishlistLoading}
+                className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
+                title={isProductInWishlist(item._id) ? "Remove from Wishlist" : "Add to Wishlist"}
+              >
+                <Heart
+                  className={`w-5 h-5 ${
+                    isProductInWishlist(item._id)
+                      ? "fill-red-500 text-red-500"
+                      : "text-gray-400 hover:text-red-500"
+                  }`}
+                />
+              </button>
+
               <img
                 src={item.image}
                 alt={item.name}

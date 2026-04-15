@@ -7,8 +7,6 @@ import Subscrib from "./components/Subscrib.jsx";
 import Testmonial from "./components/Testmonial.jsx";
 import Footern from "./components/Footern.jsx";
 import { Routes, Route } from "react-router-dom";
-import Menwear from "./components/Menwear";
-import KidsWear from "./components/KidsWear.jsx";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import React from "react";
@@ -22,26 +20,28 @@ import Cart from "./pages/Cart";
 
 import ProtectedRoute from "./components/admin/ProtectedRoute.jsx";
 
-
 import MainLayout from "./layouts/MainLayout..jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AddProduct from   "./components/admin/AddProduct.jsx";
+import AddProduct from "./components/admin/AddProduct.jsx";
 import ProductList from "./components/admin/ProductList.jsx";
 import EditProduct from "./components/admin/EditProduct.jsx";
 import ManageOrders from "./components/admin/ManageOrders.jsx";
-import AdminDashboard from "./components/admin/AdminAnalytics.jsx"
-import OrderDetail from "./components/admin/AdminOrderDetails.jsx"
-import OrderStatus from "./pages/OrderDetail.jsx"
+import AdminDashboard from "./components/admin/AdminAnalytics.jsx";
+import OrderDetail from "./components/admin/AdminOrderDetails.jsx";
+import OrderStatus from "./pages/OrderDetail.jsx";
 import Orders from "./pages/Orders.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
-import CategoryUpadat from "./components/admin/CategoryUpdate.jsx"
+import CategoryUpadat from "./components/admin/CategoryUpdate.jsx";
 import SearchPage from "./components/SearchPage.jsx";
-import VerifyOtp from "./pages/Verifyotp.jsx"
+import VerifyOtp from "./pages/Verifyotp.jsx";
 import ManageCoupons from "./components/admin/ManageCoupons.jsx";
-import AboutUs from "./pages/AboutUs.jsx"
+import AboutUs from "./pages/AboutUs.jsx";
+import Settings from "./pages/Settings.jsx";
+import Profile from "./pages/Profile.jsx";
+
 function App() {
   React.useEffect(() => {
     AOS.init({
@@ -82,6 +82,8 @@ function App() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/order-status/:id" element={<OrderStatus />} />
           <Route path="/search/:query" element={<SearchPage />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route path="/login" element={<Login />} />

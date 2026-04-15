@@ -7,40 +7,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
-import { Settings } from "lucide-react";
-import { LogOut } from "lucide-react";
+import { Settings, LogOut, Heart, User, History } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
-import { User, Edit3, Save, X, Camera, Mail, Shield, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
-
-import { History, List } from "lucide-react";
-
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [openSettings, setOpenSettings] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [saving, setSaving] = useState(false);
   const { cartCount } = useCart();
-  const { isLoggedIn, setIsLoggedIn, user, setUser } = useAuth();
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
   const [search, setSearch] = useState();
   const navigate = useNavigate();
   const settingsRef = useRef(null);
-  const fileInputRef = useRef(null);
-
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-  });
-
-  // Sync form data when user changes
-  useEffect(() => {
-    if (user) {
-      setFormData({ username: user.username || "", email: user.email || "" });
-    }
-  }, [user]);
 
   // FETCH CATEGORIES
   useEffect(() => {
@@ -59,14 +38,11 @@ function Navbar() {
     const handleClickOutside = (e) => {
       if (settingsRef.current && !settingsRef.current.contains(e.target)) {
         setOpenSettings(false);
-        setShowProfile(false);
-        setIsEditing(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
 
   // ✅ Logout Function
   const handleLogout = async () => {
@@ -85,7 +61,6 @@ function Navbar() {
     }
   };
 
-
   const handleSearch = (e) => {
     e.preventDefault();
     if (!search.trim()) return;
@@ -98,83 +73,6 @@ function Navbar() {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
   };
-
-  const getInitials = (name) => {
-    if (!name) return "U";
-    return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
-  };
-
-  const handleProfileSave = async () => {
-    try {
-      setSaving(true);
-      const res = await axios.put(
-        "http://localhost:3000/api/auth/update-profile",
-        formData,
-        { withCredentials: true }
-      );
-      if (res.data.success) {
-        setUser(res.data.user);
-        setIsEditing(false);
-        toast.success("Profile updated!");
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Update failed");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handlePicUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const fd = new FormData();
-    fd.append("profilePic", file);
-
-    try {
-      setSaving(true);
-      const res = await axios.put(
-        "http://localhost:3000/api/auth/update-profile",
-        fd,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      if (res.data.success) {
-        setUser(res.data.user);
-        toast.success("Profile picture updated!");
-      }
-    } catch (error) {
-      toast.error("Failed to upload picture");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setFormData({ username: user?.username || "", email: user?.email || "" });
-    setIsEditing(false);
-  };
-
-  const handleRemovePic = async () => {
-    try {
-      setSaving(true);
-      const res = await axios.delete(
-        "http://localhost:3000/api/auth/remove-profile-pic",
-        { withCredentials: true }
-      );
-      if (res.data.success) {
-        setUser(res.data.user);
-        toast.success("Profile picture removed!");
-      }
-    } catch (error) {
-      toast.error("Failed to remove picture");
-    } finally {
-      setSaving(false);
-    }
-  };
-
 
   return (
     <div>
@@ -209,7 +107,6 @@ function Navbar() {
             </Link>
           )}
 
-        
           {/* ✅ Profile or Logout */}
           {isLoggedIn ? (
             <button
@@ -238,10 +135,7 @@ function Navbar() {
             />
 
             {openSettings && (
-              <div
-                className="absolute right-0 mt-2 bg-white shadow-2xl rounded-2xl z-50 border border-gray-100 overflow-hidden"
-                style={{ width: showProfile ? "320px" : "200px", transition: "width 0.3s ease" }}
-              >
+              <div className="absolute right-0 mt-2 bg-white shadow-2xl rounded-2xl z-50 border border-gray-100 overflow-hidden w-56">
                 {/* WhatsApp */}
                 <button
                   onClick={openWhatsApp}
@@ -251,164 +145,32 @@ function Navbar() {
                   Chat on WhatsApp
                 </button>
 
-                {/* Profile Toggle Button */}
-                <button
-                  onClick={() => {
-                    setShowProfile(!showProfile);
-                    setIsEditing(false);
-                  }}
-                  className={`flex items-center gap-2 w-full text-left px-4 py-3 text-sm font-medium transition-colors ${
-                    showProfile ? "bg-orange-100 text-orange-600" : "hover:bg-orange-50 text-gray-700"
-                  }`}
-                >
-                  <User size={18} />
-                  Profile
-                </button>
-
-                {/* ✅ INLINE PROFILE PANEL */}
-                {showProfile && isLoggedIn && (
-                  <div className="border-t border-orange-100">
-                    {/* Profile Header with Pic */}
-                    <div className="bg-gradient-to-r from-orange-400 to-amber-400 px-4 py-5 flex flex-col items-center">
-                      {/* Profile Pic */}
-                      <div className="relative group">
-                        {user?.profilePic ? (
-                          <img
-                            src={user.profilePic}
-                            alt="Profile"
-                            className="w-20 h-20 rounded-full object-cover border-3 border-white shadow-lg"
-                          />
-                        ) : (
-                          <div className="w-20 h-20 rounded-full bg-white/25 backdrop-blur-sm flex items-center justify-center text-white text-2xl font-bold border-3 border-white shadow-lg">
-                            {getInitials(user?.username)}
-                          </div>
-                        )}
-                        {/* Camera overlay */}
-                        <button
-                          onClick={() => fileInputRef.current?.click()}
-                          className="absolute bottom-0 right-0 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-orange-50 transition-colors cursor-pointer"
-                          title="Change photo"
-                        >
-                          <Camera size={14} className="text-orange-500" />
-                        </button>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={handlePicUpload}
-                        />
-                      </div>
-                      {/* Upload / Remove buttons */}
-                      <div className="flex items-center gap-2 mt-2">
-                        <button
-                          onClick={() => fileInputRef.current?.click()}
-                          className="text-white/90 text-xs hover:text-white underline cursor-pointer"
-                        >
-                          Change photo
-                        </button>
-                        {user?.profilePic && (
-                          <>
-                            <span className="text-white/50">|</span>
-                            <button
-                              onClick={handleRemovePic}
-                              disabled={saving}
-                              className="text-white/90 text-xs hover:text-red-200 underline cursor-pointer flex items-center gap-0.5"
-                            >
-                              <Trash2 size={10} />
-                              Remove
-                            </button>
-                          </>
-                        )}
-                      </div>
-                      <p className="text-white font-semibold text-sm mt-1">{user?.username}</p>
-                      <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-white/20 text-white">
-                        <Shield size={10} />
-                        {user?.role === "admin" ? "Admin" : "Customer"}
-                      </span>
-                    </div>
-
-                    {/* User Details */}
-                    <div className="p-4 space-y-3">
-                      {/* Username */}
-                      <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1">
-                          <User size={12} /> Username
-                        </label>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            value={formData.username}
-                            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                            className="w-full mt-1 px-3 py-1.5 text-sm border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
-                          />
-                        ) : (
-                          <p className="text-gray-800 font-medium text-sm mt-0.5">{user?.username}</p>
-                        )}
-                      </div>
-
-                      {/* Email */}
-                      <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1">
-                          <Mail size={12} /> Email
-                        </label>
-                        {isEditing ? (
-                          <input
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full mt-1 px-3 py-1.5 text-sm border border-orange-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
-                          />
-                        ) : (
-                          <p className="text-gray-800 font-medium text-sm mt-0.5 truncate">{user?.email}</p>
-                        )}
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="pt-2 flex gap-2">
-                        {isEditing ? (
-                          <>
-                            <button
-                              onClick={handleProfileSave}
-                              disabled={saving}
-                              className="flex-1 flex items-center justify-center gap-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-2 rounded-lg text-xs font-semibold hover:from-orange-600 hover:to-amber-600 transition-all disabled:opacity-50"
-                            >
-                              <Save size={14} />
-                              {saving ? "Saving..." : "Save"}
-                            </button>
-                            <button
-                              onClick={handleCancelEdit}
-                              className="flex-1 flex items-center justify-center gap-1 bg-gray-100 text-gray-600 py-2 rounded-lg text-xs font-semibold hover:bg-gray-200 transition-all"
-                            >
-                              <X size={14} />
-                              Cancel
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            onClick={() => setIsEditing(true)}
-                            className="w-full flex items-center justify-center gap-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-2 rounded-lg text-xs font-semibold hover:from-orange-600 hover:to-amber-600 transition-all"
-                          >
-                            <Edit3 size={14} />
-                            Edit Profile
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                {/* Profile Button - Navigate to Full Profile Page */}
+                {isLoggedIn && (
+                  <button
+                    onClick={() => {
+                      navigate("/profile");
+                      setOpenSettings(false);
+                    }}
+                    className="flex items-center gap-2 w-full text-left px-4 py-3 hover:bg-orange-50 text-gray-700 text-sm font-medium transition-colors"
+                  >
+                    <User size={18} />
+                    My Profile
+                  </button>
                 )}
 
-                {/* Show login prompt if not logged in */}
-                {showProfile && !isLoggedIn && (
-                  <div className="border-t border-gray-100 p-4 text-center">
-                    <p className="text-gray-500 text-sm mb-2">Please login to view profile</p>
-                    <button
-                      onClick={() => { setOpenSettings(false); navigate("/login"); }}
-                      className="bg-orange-500 text-white px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-orange-600 transition-colors"
-                    >
-                      Login
-                    </button>
-                  </div>
+                {/* Settings - Wishlist */}
+                {isLoggedIn && (
+                  <button
+                    onClick={() => {
+                      setOpenSettings(false);
+                      navigate("/settings");
+                    }}
+                    className="flex items-center gap-2 w-full text-left px-4 py-3 hover:bg-red-50 text-gray-700 text-sm font-medium transition-colors border-t border-gray-100"
+                  >
+                    <Heart size={18} className="text-red-500" />
+                    Wishlist & Settings
+                  </button>
                 )}
 
                 {/* About Us */}
@@ -420,8 +182,7 @@ function Navbar() {
                   About Us
                 </button>
 
-
- <button
+                <button
                   onClick={() => navigate("/orders")}
                   className="flex items-center gap-2 w-full text-left px-4 py-3 hover:bg-orange-50 text-gray-700 text-sm font-medium transition-colors"
                 >
@@ -500,4 +261,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
