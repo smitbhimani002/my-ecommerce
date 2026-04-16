@@ -17,7 +17,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173", // dev
+      "http://localhost:3000", // local testing
+      "https://my-ecommerce-51mu.onrender.com", // ✅ Render frontend URL
+    ],
     credentials: true,
   }),
 );

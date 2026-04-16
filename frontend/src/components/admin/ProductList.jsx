@@ -11,13 +11,13 @@ const ProductList = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const fetchCategories = async () => {
-    const res = await axios.get("process.env.BASE_URL/api/admin/categories");
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/admin/categories`);
 
     setCategories(res.data.categories);
   };
   const fetchProducts = async () => {
     const res = await axios.get(
-      `process.env.BASE_URL/api/admin/getproducts?page=${page}&limit=6&category=${filterStatus}&search=${search}`,
+      `${import.meta.env.VITE_BASE_URL}/api/admin/getproducts?page=${page}&limit=6&category=${filterStatus}&search=${search}`,
       { withCredentials: true },
     );
 
@@ -36,7 +36,7 @@ const ProductList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
 
-    await axios.delete(`process.env.BASE_URL/api/admin/product/${id}`, {
+    await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/admin/product/${id}`, {
       withCredentials: true,
     });
 

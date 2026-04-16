@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const res = await axios.get("process.env.BASE_URL/api/auth/me", {
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/auth/me`, {
           withCredentials: true,
         });
 

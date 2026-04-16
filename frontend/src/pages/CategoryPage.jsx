@@ -20,7 +20,7 @@ export default function CategoryPage() {
       setLoading(true);
 
       const res = await axios.get(
-        `process.env.BASE_URL/api/products/category/${encodedname}`,
+        `${import.meta.env.VITE_BASE_URL}/api/products/category/${encodedname}`,
       );
 
       const data = res.data.products;
@@ -46,7 +46,7 @@ export default function CategoryPage() {
     setLoading(true);
 
     const res = await axios.get(
-      `process.env.BASE_URL/api/products/category/${encodedname}?lastId=${lastId || ""}`,
+      `${import.meta.env.VITE_BASE_URL}/api/products/category/${encodedname}?lastId=${lastId || ""}`,
     );
 
     const newProducts = res.data.products;

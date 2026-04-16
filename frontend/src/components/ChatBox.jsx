@@ -17,9 +17,12 @@ const ChatBot = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("process.env.BASE_URL/api/chat", {
-        message: input,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/chat`,
+        {
+          message: input,
+        },
+      );
 
       const botMsg = { type: "bot", text: res.data.reply };
       setMessages((prev) => [...prev, botMsg]);

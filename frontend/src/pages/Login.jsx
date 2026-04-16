@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setIsLoggedIn, setUser } = useAuth();
+  const { setIsLoggedIn, setUser, loading: authLoading } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -30,7 +30,7 @@ const Login = () => {
       setLoading(true);
 
       const res = await axios.post(
-        "process.env.BASE_URL/api/auth/login",
+        `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
         formData,
         {
           withCredentials: true,
@@ -99,8 +99,8 @@ const Login = () => {
           {/* Button */}
           <button
             type="submit"
-            disabled={loading}
-            className="w-full bg-orange-500 text-white py-2 rounded-xl hover:bg-orange-600 transition duration-300"
+            disabled={loading || authLoading}
+            className="w-full bg-orange-500 text-white py-2 rounded-xl hover:bg-orange-600 transition duration-300 disabled:opacity-50"
           >
             {loading ? "sending otp..." : "SEND OTP"}
           </button>

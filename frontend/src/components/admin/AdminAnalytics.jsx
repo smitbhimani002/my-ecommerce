@@ -15,7 +15,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await axios.get("process.env.BASE_URL/api/admin/dashboard", {
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/admin/dashboard`, {
         withCredentials: true,
       });
 

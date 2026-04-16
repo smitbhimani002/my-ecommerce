@@ -10,7 +10,7 @@ export default function AdminOrderDetails() {
     const fatchOrder = async () => {
       try {
         const res = await axios.get(
-          `process.env.BASE_URL/api/admin/order/${id}`,
+          `${import.meta.env.VITE_BASE_URL}/api/admin/order/${id}`,
           {
             withCredentials: true,
           },

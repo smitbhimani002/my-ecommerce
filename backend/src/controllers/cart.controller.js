@@ -1,12 +1,16 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import { Cart } from "../models/cart.model.js";
+import { ApiError } from "../utils/api.err.js";
 
 export const addToCart = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { id, name, price, image, size, color } = req.body;
 
-  let cart = await Cart.findOne({ user: userId });
+  if (!id || !name || !price || !image) {
+    throw new ApiError(400, "Product details are required");
+  }
 
+  let cart = await Cart.findOne({ user: userId });
   if (!cart) {
     cart = await Cart.create({
       user: userId,
@@ -37,27 +41,37 @@ export const addToCart = asyncHandler(async (req, res) => {
     });
   }
   await cart.save();
-  console.log("i check color : ", cart);
 
-  res.status(200).json(cart);
+  res.status(200).json({
+    success: true,
+    message: "Product added to cart",
+    items: cart.items,
+  });
 });
 
 export const getCart = asyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id });
 
-  res.status(200).json(cart || { items: [] });
+  res.status(200).json({
+    success: true,
+    items: cart?.items || [],
+  });
 });
 
 export const updateQuantity = asyncHandler(async (req, res) => {
   const { productId, size, color, action } = req.body;
   const cart = await Cart.findOne({ user: req.user._id });
 
+  if (!cart) {
+    throw new ApiError(404, "Cart not found");
+  }
+
   const item = cart.items.find(
     (i) => i.productId === productId && i.size === size && i.color === color,
   );
 
   if (!item) {
-    return res.status(404).json({ message: "Item not found in cart" });
+    throw new ApiError(404, "Item not found in cart");
   }
 
   if (action === "inc") item.quantity += 1;
@@ -67,7 +81,10 @@ export const updateQuantity = asyncHandler(async (req, res) => {
 
   await cart.save();
 
-  res.status(200).json(cart);
+  res.status(200).json({
+    success: true,
+    items: cart.items,
+  });
 });
 
 export const removeItem = asyncHandler(async (req, res) => {
@@ -76,7 +93,7 @@ export const removeItem = asyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id });
 
   if (!cart) {
-    return res.status(404).json({ message: "Cart not found" });
+    throw new ApiError(404, "Cart not found");
   }
 
   cart.items = cart.items.filter(
@@ -90,5 +107,9 @@ export const removeItem = asyncHandler(async (req, res) => {
 
   await cart.save();
 
-  res.status(200).json(cart);
+  res.status(200).json({
+    success: true,
+    message: "Item removed from cart",
+    items: cart.items,
+  });
 });

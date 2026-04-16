@@ -7,7 +7,7 @@ const ManageOrders = () => {
   const navigate = useNavigate();
 
   const fetchOrders = async () => {
-    const res = await axios.get("process.env.BASE_URL/api/admin/orders", {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/admin/orders`, {
       withCredentials: true,
     });
 
@@ -20,7 +20,7 @@ const ManageOrders = () => {
 
   const updateStatus = async (id, status) => {
     await axios.put(
-      `process.env.BASE_URL/api/admin/orders/${id}`,
+      `${import.meta.env.VITE_BASE_URL}/api/admin/orders/${id}`,
       { status },
       { withCredentials: true },
     );

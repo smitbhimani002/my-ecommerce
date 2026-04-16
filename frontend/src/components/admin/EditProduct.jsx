@@ -26,7 +26,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       const res = await axios.get(
-        `process.env.BASE_URL/api/admin/product/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/admin/product/${id}`,
         { withCredentials: true },
       );
 
@@ -105,7 +105,7 @@ const EditProduct = () => {
         data.append("image", formData.image);
       }
 
-      await axios.put(`process.env.BASE_URL/api/admin/product/${id}`, data, {
+      await axios.put(`${import.meta.env.VITE_BASE_URL}/api/admin/product/${id}`, data, {
         withCredentials: true,
       });
 

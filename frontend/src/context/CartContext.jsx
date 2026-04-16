@@ -32,9 +32,12 @@ export const CartProvider = ({ children }) => {
 
   const fetchWishlist = async () => {
     try {
-      const res = await axios.get("process.env.BASE_URL/api/wishlist", {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/wishlist`,
+        {
+          withCredentials: true,
+        },
+      );
       const products = res.data.wishlist?.products || [];
       setWishlist(products);
       // Create Set of IDs for quick lookup
@@ -47,7 +50,7 @@ export const CartProvider = ({ children }) => {
 
   const fetchCart = async () => {
     try {
-      const res = await axios.get("process.env.BASE_URL/api/cart", {
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/cart`, {
         withCredentials: true,
       });
       setCartItems(res.data.items || []);
@@ -59,7 +62,7 @@ export const CartProvider = ({ children }) => {
   const addToCart = async (product) => {
     try {
       await axios.post(
-        "process.env.BASE_URL/api/cart/add",
+        `${import.meta.env.VITE_BASE_URL}/api/cart/add`,
         {
           id: product._id,
           name: product.name,
@@ -71,7 +74,8 @@ export const CartProvider = ({ children }) => {
         { withCredentials: true },
       );
 
-      fetchCart();
+      await fetchCart();
+      toast.success("Product added successfully");
     } catch (error) {
       toast.error("Failed to add product");
       console.log(error);
@@ -79,42 +83,57 @@ export const CartProvider = ({ children }) => {
   };
 
   const increaseQty = async (id, size, color) => {
-    await axios.post(
-      "process.env.BASE_URL/api/cart/update",
-      { productId: id, size, color, action: "inc" },
-      { withCredentials: true },
-    );
-    toast.success("Product increased in cart ");
-    fetchCart();
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/cart/update`,
+        { productId: id, size, color, action: "inc" },
+        { withCredentials: true },
+      );
+      await fetchCart();
+      toast.success("Product increased in cart ");
 
-    if (appliedCoupon) {
-      clearCoupon();
+      if (appliedCoupon) {
+        clearCoupon();
+      }
+    } catch (error) {
+      toast.error("Failed to increase quantity");
+      console.log(error);
     }
   };
 
   const decreaseQty = async (id, size, color) => {
-    await axios.post(
-      "process.env.BASE_URL/api/cart/update",
-      { productId: id, size, color, action: "dec" },
-      { withCredentials: true },
-    );
-    toast.success("Product decreased in cart ");
-    fetchCart();
-    if (appliedCoupon) {
-      clearCoupon();
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/cart/update`,
+        { productId: id, size, color, action: "dec" },
+        { withCredentials: true },
+      );
+      await fetchCart();
+      toast.success("Product decreased in cart ");
+      if (appliedCoupon) {
+        clearCoupon();
+      }
+    } catch (error) {
+      toast.error("Failed to decrease quantity");
+      console.log(error);
     }
   };
 
   const removeItem = async (id, size, color) => {
-    await axios.post(
-      "process.env.BASE_URL/api/cart/remove",
-      { productId: id, size, color },
-      { withCredentials: true },
-    );
-    toast.success("Product removed from cart ");
-    fetchCart();
-    if (appliedCoupon) {
-      clearCoupon();
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/cart/remove`,
+        { productId: id, size, color },
+        { withCredentials: true },
+      );
+      await fetchCart();
+      toast.success("Product removed from cart ");
+      if (appliedCoupon) {
+        clearCoupon();
+      }
+    } catch (error) {
+      toast.error("Failed to remove product");
+      console.log(error);
     }
   };
 
@@ -124,7 +143,7 @@ export const CartProvider = ({ children }) => {
     setWishlistLoading(true);
     try {
       const res = await axios.post(
-        "process.env.BASE_URL/api/wishlist/add",
+        `${import.meta.env.VITE_BASE_URL}/api/wishlist/add`,
         { productId },
         { withCredentials: true },
       );
@@ -145,7 +164,7 @@ export const CartProvider = ({ children }) => {
     setWishlistLoading(true);
     try {
       const res = await axios.post(
-        "process.env.BASE_URL/api/wishlist/remove",
+        `${import.meta.env.VITE_BASE_URL}/api/wishlist/remove`,
         { productId },
         { withCredentials: true },
       );
@@ -197,7 +216,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       const res = await axios.post(
-        "process.env.BASE_URL/api/coupons/apply",
+        `${import.meta.env.VITE_BASE_URL}/api/coupons/apply`,
         { code: code.trim(), orderTotal: totalAmount },
         { withCredentials: true },
       );
@@ -235,7 +254,7 @@ export const CartProvider = ({ children }) => {
     setTimeout(async () => {
       try {
         const res = await axios.post(
-          "process.env.BASE_URL/api/admin/checkout",
+          `${import.meta.env.VITE_BASE_URL}/api/admin/checkout`,
           {
             paymentMethod: "Card",
             couponCode: appliedCoupon?.code || null,

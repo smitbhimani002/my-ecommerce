@@ -36,20 +36,28 @@ export default function OrderDetail() {
   };
 
   useEffect(() => {
-    axios.get(`/api/admin/order/${id}`).then((res) => setOrder(res.data.order));
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/api/admin/order/${id}`, {
+        withCredentials: true,
+      })
+      .then((res) => setOrder(res.data.order))
+      .catch((error) => console.log(error));
   }, [id]);
-  console.log(`/api/admin/order/${id}`)
 
   if (!order) return <p>Loading...</p>;
 
   const cancelOrder = async () => {
-  try {await axios.put(` /api/admin/cancel-order/${order._id}`);
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_BASE_URL}/api/admin/cancel-order/${order._id}`,
+        {},
+        { withCredentials: true },
+      );
 
-   setOrder({ ...order, orderStatus: "Cancelled" });
-    
-  } catch (error) {
-    
-console.log(error)  } 
+      setOrder({ ...order, orderStatus: "Cancelled" });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

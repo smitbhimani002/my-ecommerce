@@ -36,7 +36,7 @@ const Signup = () => {
       setLoading(true);
 
       const response = await axios.post(
-        "process.env.BASE_URL/api/auth/register", // change if needed
+        `${import.meta.env.VITE_BASE_URL}/api/auth/register`, // change if needed
         {
           username: formData.username,
           email: formData.email,

@@ -10,7 +10,7 @@ export default function SearchPage() {
   useEffect(() => {
     const fetchSearch = async () => {
       const res = await axios.get(
-        `process.env.BASE_URL/api/products/search?query=${query}`,
+        `${import.meta.env.VITE_BASE_URL}/api/products/search?query=${query}`,
       );
 
       setProducts(res.data.products);

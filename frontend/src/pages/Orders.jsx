@@ -23,7 +23,7 @@ export default function Orders() {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(
-          "process.env.BASE_URL/api/admin/my-orders",
+          `${import.meta.env.VITE_BASE_URL}/api/admin/my-orders`,
           {
             withCredentials: true,
           },

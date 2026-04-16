@@ -23,7 +23,7 @@ import {
   Copy,
 } from "lucide-react";
 
-const API = "process.env.BASE_URL/api/coupons";
+const API = `${import.meta.env.VITE_BASE_URL}/api/coupons`;
 export default function ManageCoupons() {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);

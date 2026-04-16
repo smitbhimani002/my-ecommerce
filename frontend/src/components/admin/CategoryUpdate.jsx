@@ -14,7 +14,7 @@ export default function AddCategory() {
 
   useEffect(() => {
     axios
-      .get("process.env.BASE_URL/api/admin/categories")
+      .get(`${import.meta.env.VITE_BASE_URL}/api/admin/categories`)
       .then((res) => {
         console.log(res.data);
         setCategories(res.data.categories);
@@ -24,7 +24,7 @@ export default function AddCategory() {
 
   useEffect(() => {
     axios
-      .get("process.env.BASE_URL/api/admin/category-chart")
+      .get(`${import.meta.env.VITE_BASE_URL}/api/admin/category-chart`)
       .then((res) => {
         setChartData(res.data.categories);
         setTotalStock(res.data.total);
@@ -79,7 +79,7 @@ export default function AddCategory() {
 
     if (!confirm.isConfirmed) return;
 
-    await axios.delete(`process.env.BASE_URL/api/admin/category/${id}`, {
+    await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/admin/category/${id}`, {
       withCredentials: true,
     });
 
@@ -89,7 +89,7 @@ export default function AddCategory() {
   const updateCategory = async (id) => {
     try {
       await axios.put(
-        `process.env.BASE_URL/api/admin/category/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/admin/category/${id}`,
         { name: editName },
         { withCredentials: true },
       );
@@ -119,7 +119,7 @@ export default function AddCategory() {
     e.preventDefault();
     try {
       await axios.post(
-        "process.env.BASE_URL/api/admin/category",
+        `${import.meta.env.VITE_BASE_URL}/api/admin/category`,
         { name },
         { withCredentials: true },
       );

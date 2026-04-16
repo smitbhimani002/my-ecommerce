@@ -158,7 +158,6 @@ const ProductGrid = ({
                     size: selectedSizes[item._id],
                     color: selectedColors[item._id],
                   });
-                  toast.success("Product added successfully ");
                 }}
                 className="mt-auto bg-orange-500 text-white px-3 py-2 rounded-2xl w-full hover:bg-orange-600"
               >

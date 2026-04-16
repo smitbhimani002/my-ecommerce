@@ -24,7 +24,7 @@ const Settings = () => {
               [product._id]: true,
             }));
             const res = await axios.get(
-              `process.env.BASE_URL/api/admin/product/${product._id}`,
+              `${import.meta.env.VITE_BASE_URL}/api/admin/product/${product._id}`,
             );
             setProductDetails((prev) => ({
               ...prev,

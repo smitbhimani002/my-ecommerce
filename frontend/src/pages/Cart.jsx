@@ -56,7 +56,7 @@ const Cart = () => {
     setCouponsLoading(true);
     try {
       const res = await axios.get(
-        "process.env.BASE_URL/api/coupons/user/available",
+        `${import.meta.env.VITE_BASE_URL}/api/coupons/user/available`,
         {
           withCredentials: true,
         },

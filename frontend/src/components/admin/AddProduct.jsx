@@ -8,7 +8,7 @@ const AddProduct = () => {
 
   useEffect(() => {
     axios
-      .get("process.env.BASE_URL/api/admin/categories")
+      .get(`${import.meta.env.VITE_BASE_URL}/api/admin/categories`)
       .then((res) => setCategories(res.data.categories))
       .catch((error) => console.log(error));
   }, []);
@@ -82,11 +82,11 @@ const AddProduct = () => {
 
       // data.append("totalStock", JSON.stringify(formData.color));
 
-      await axios.post("process.env.BASE_URL/api/admin/add-product", data, {
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/admin/add-product`, data, {
         withCredentials: true,
       });
 
-      console.log("process.env.BASE_URL/api/admin/add-product");
+      console.log(`${import.meta.env.VITE_BASE_URL}/api/admin/add-product`);
       alert("Product Added Successfully ");
 
       // Reset form

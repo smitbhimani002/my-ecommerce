@@ -9,7 +9,7 @@ const Menwear = () => {
 
   useEffect(() => {
     axios
-      .get("process.env.BASE_URL/api/admin/getproducts")
+      .get(`${import.meta.env.VITE_BASE_URL}/api/admin/getproducts`)
 
       .then((res) => {
         const ElectronicProduct = res.data.products.filter(
