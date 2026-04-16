@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "build": "echo Building frontend... && cd ../frontend && npm install && npm run build",
-    "start": "npm run build && node src/index.js"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
