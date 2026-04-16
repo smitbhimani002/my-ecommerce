@@ -21,7 +21,7 @@ app.use(
       "http://localhost:5173", // dev
       "http://localhost:3000", // local testing
       "https://my-ecommerce-51mu.onrender.com", // ✅ Render frontend URL
-      "https://my-ecommerce-gbmb.vercel.app/", // ✅ Vercel frontend URL
+      "https://my-ecommerce-gbmb.vercel.app", // ✅ Vercel frontend URL
     ],
     credentials: true,
   }),
