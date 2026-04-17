@@ -241,19 +241,9 @@ function Navbar() {
               </li>
             ))}
 
-          <li>
-            <Link to="/TopReted" className="hover:text-orange-500">
-              TopReted
-            </Link>
-          </li>
+         
 
-          <li className="relative group cursor-pointer">
-            <span className="hover:text-orange-500">Trending Items</span>
-            <ul className="md:absolute hidden md:group-hover:block shadow-md mt-2 w-40 z-99 bg-white text-center">
-              <li className="py-2 hover:bg-orange-100">New Arrivals</li>
-              <li className="py-2 hover:bg-orange-100">Best Sellers</li>
-            </ul>
-          </li>
+         
         </ul>
       </div>
     </div>

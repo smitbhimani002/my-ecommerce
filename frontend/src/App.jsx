@@ -75,9 +75,6 @@ function App() {
           />
           <Route path="/category/:name" element={<CategoryPage />} />
 
-          {/* <Route path="/kids" element={<KidsWear />} /> */}
-          <Route path="/topreted" element={<TopReted />} />
-          {/* <Route path="/electronic" element={<Electronic />} /> */}
           <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/order-status/:id" element={<OrderStatus />} />
