@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar";
 import Hero1 from "./components/hero1.jsx";
 import Product from "./components/product.jsx";
-import TopProduct from "./components/TopProduct.jsx";
+import TopProduct from "./components/topproduct.jsx";
 import Banner from "./components/Banner.jsx";
 import Subscrib from "./components/Subscrib.jsx";
 import Testmonial from "./components/Testmonial.jsx";
@@ -12,6 +12,7 @@ import "slick-carousel/slick/slick-theme.css";
 import React from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Electronic from "./components/Electonic.jsx";
@@ -74,6 +75,9 @@ function App() {
           />
           <Route path="/category/:name" element={<CategoryPage />} />
 
+          {/* <Route path="/kids" element={<KidsWear />} /> */}
+          
+          {/* <Route path="/electronic" element={<Electronic />} /> */}
           <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/order-status/:id" element={<OrderStatus />} />
