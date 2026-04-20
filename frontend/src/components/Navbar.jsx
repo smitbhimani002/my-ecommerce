@@ -107,15 +107,8 @@ function Navbar() {
             </Link>
           )}
 
-          {/* ✅ Profile or Logout */}
-          {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="bg-black text-white px-4 py-2 rounded-xl hover:bg-gray-800"
-            >
-              Logout
-            </button>
-          ) : (
+          {/* ✅ Profile Link */}
+          {!isLoggedIn && (
             <Link to="/Login">
               <CgProfile className="w-10 h-12.5 cursor-pointer" />
             </Link>
@@ -240,7 +233,6 @@ function Navbar() {
                 </Link>
               </li>
             ))}
-
 
           <li className="relative group cursor-pointer">
             <span className="hover:text-orange-500">Trending Items</span>
