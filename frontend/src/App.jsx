@@ -41,6 +41,7 @@ import ManageCoupons from "./components/admin/ManageCoupons.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import Settings from "./pages/Settings.jsx";
 import Profile from "./pages/Profile.jsx";
+import ProductDetail from "./pages/ProductDetail.jsx";
 
 function App() {
   React.useEffect(() => {
@@ -74,6 +75,7 @@ function App() {
             }
           />
           <Route path="/category/:name" element={<CategoryPage />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
 
           {/* <Route path="/kids" element={<KidsWear />} /> */}
           
