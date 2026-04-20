@@ -30,7 +30,11 @@ const ProductGrid = ({
                 onClick={() => toggleWishlist(item._id)}
                 disabled={wishlistLoading}
                 className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
-                title={isProductInWishlist(item._id) ? "Remove from Wishlist" : "Add to Wishlist"}
+                title={
+                  isProductInWishlist(item._id)
+                    ? "Remove from Wishlist"
+                    : "Add to Wishlist"
+                }
               >
                 <Heart
                   className={`w-5 h-5 ${
@@ -48,7 +52,7 @@ const ProductGrid = ({
                 className="h-40 mx-auto mb-4 object-contain cursor-pointer hover:scale-105 transition-transform"
               />
 
-              <h2 
+              <h2
                 onClick={() => navigate(`/product/${item._id}`)}
                 className="font-semibold cursor-pointer hover:text-orange-500 transition-colors"
               >
