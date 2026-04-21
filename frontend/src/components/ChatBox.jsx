@@ -65,7 +65,7 @@ const ChatBot = () => {
 
   // Open State - Full Chat Box
   return (
-    <div className="fixed bottom-6 right-6 w-96 h-screen max-h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden">
+    <div className="fixed bottom-2 right-2 left-2 sm:left-auto sm:right-6 sm:bottom-6 w-auto sm:w-96 h-[85vh] sm:h-screen sm:max-h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 flex justify-between items-center">
         <div>
