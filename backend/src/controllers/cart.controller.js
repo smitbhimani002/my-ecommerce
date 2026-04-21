@@ -19,12 +19,14 @@ export const addToCart = asyncHandler(async (req, res) => {
   }
 
   const productId = id.toString();
+  const itemSize = size || null;
+  const itemColor = color || null;
 
   const existingItem = cart.items.find(
     (item) =>
       item.productId === productId &&
-      item.size === size &&
-      item.color === color,
+      item.size === itemSize &&
+      item.color === itemColor,
   );
 
   if (existingItem) {
@@ -35,8 +37,8 @@ export const addToCart = asyncHandler(async (req, res) => {
       name,
       price,
       image,
-      size,
-      color,
+      size: itemSize,
+      color: itemColor,
       quantity: 1,
     });
   }
@@ -66,8 +68,11 @@ export const updateQuantity = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Cart not found");
   }
 
+  const itemSize = size || null;
+  const itemColor = color || null;
+
   const item = cart.items.find(
-    (i) => i.productId === productId && i.size === size && i.color === color,
+    (i) => i.productId === productId && i.size === itemSize && i.color === itemColor,
   );
 
   if (!item) {
@@ -96,12 +101,15 @@ export const removeItem = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Cart not found");
   }
 
+  const itemSize = size || null;
+  const itemColor = color || null;
+
   cart.items = cart.items.filter(
     (item) =>
       !(
         item.productId === productId &&
-        item.size === size &&
-        item.color === color
+        item.size === itemSize &&
+        item.color === itemColor
       ),
   );
 

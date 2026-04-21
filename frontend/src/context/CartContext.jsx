@@ -68,8 +68,8 @@ export const CartProvider = ({ children }) => {
           name: product.name,
           price: product.price,
           image: product.image,
-          size: product.size,
-          color: product.color,
+          size: product.size || null,
+          color: product.color || null,
         },
         { withCredentials: true },
       );
@@ -86,7 +86,7 @@ export const CartProvider = ({ children }) => {
     try {
       await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/cart/update`,
-        { productId: id, size, color, action: "inc" },
+        { productId: id, size: size || null, color: color || null, action: "inc" },
         { withCredentials: true },
       );
       await fetchCart();
@@ -105,7 +105,7 @@ export const CartProvider = ({ children }) => {
     try {
       await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/cart/update`,
-        { productId: id, size, color, action: "dec" },
+        { productId: id, size: size || null, color: color || null, action: "dec" },
         { withCredentials: true },
       );
       await fetchCart();
@@ -123,7 +123,7 @@ export const CartProvider = ({ children }) => {
     try {
       await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/cart/remove`,
-        { productId: id, size, color },
+        { productId: id, size: size || null, color: color || null },
         { withCredentials: true },
       );
       await fetchCart();

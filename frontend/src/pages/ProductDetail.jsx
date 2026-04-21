@@ -27,6 +27,7 @@ export default function ProductDetail() {
           `${import.meta.env.VITE_BASE_URL}/api/admin/product/${id}`,
         );
         const productData = res.data.product;
+        console.log("Fetched product:", res.data);
         setProduct(productData);
         setMainImage(productData.image);
       } catch (error) {
@@ -80,17 +81,26 @@ export default function ProductDetail() {
 
   // Handle add to cart
   const handleAddToCart = async () => {
-    if (!selectedSize) {
-      toast.error("Please select a size");
-      return;
-    }
-    if (!selectedColor) {
-      toast.error("Please select a color");
-      return;
-    }
-    if (!isVariantInStock(selectedSize, selectedColor)) {
-      toast.error("Selected variant is out of stock");
-      return;
+    const isNonVariantCategory = product.category === "Electronics" || product.category === "watch";
+
+    if (!isNonVariantCategory) {
+      if (!selectedSize) {
+        toast.error("Please select a size");
+        return;
+      }
+      if (!selectedColor) {
+        toast.error("Please select a color");
+        return;
+      }
+      if (!isVariantInStock(selectedSize, selectedColor)) {
+        toast.error("Selected variant is out of stock");
+        return;
+      }
+    } else {
+      if (product.totalStock <= 0) {
+        toast.error("Product is out of stock");
+        return;
+      }
     }
 
     setAddingToCart(true);
@@ -100,12 +110,10 @@ export default function ProductDetail() {
         name: product.name,
         price: product.price,
         image: product.image,
-        size: selectedSize,
-        color: selectedColor,
+        size: isNonVariantCategory ? null : selectedSize,
+        color: isNonVariantCategory ? null : selectedColor,
       });
-      toast.success("Added to cart!");
     } catch (error) {
-      toast.error("Failed to add to cart");
       console.log(error);
     } finally {
       setAddingToCart(false);
@@ -204,68 +212,72 @@ export default function ProductDetail() {
               {/* Stock Status */}
               <div className="mb-6 p-3 bg-blue-50 rounded-lg">
                 <p className="text-sm font-medium text-blue-900">
-                  ✓ In Stock - {product.stock || "Available"}
+                  ✓ In Stock - {(product.category === "Electronics" || product.category === "watch") ? product.totalStock : (product.stock || "Available")}
                 </p>
               </div>
 
               {/* Sizes */}
-              <div className="mb-6">
-                <label className="block text-sm font-bold mb-3">Size</label>
-                <div className="flex gap-2 flex-wrap">
-                  {getAvailableSizes().length > 0 ? (
-                    getAvailableSizes().map((size) => (
-                      <button
-                        key={size}
-                        onClick={() => {
-                          setSelectedSize(size);
-                          setSelectedColor(null);
-                        }}
-                        className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
-                          selectedSize === size
-                            ? "bg-orange-500 text-white border-orange-500"
-                            : "bg-white text-gray-800 border-gray-300 hover:border-orange-500"
-                        }`}
-                      >
-                        {size}
-                      </button>
-                    ))
-                  ) : (
-                    <p className="text-gray-500">No sizes available</p>
-                  )}
+              {product.category !== "Electronics" && product.category !== "watch" && (
+                <div className="mb-6">
+                  <label className="block text-sm font-bold mb-3">Size</label>
+                  <div className="flex gap-2 flex-wrap">
+                    {getAvailableSizes().length > 0 ? (
+                      getAvailableSizes().map((size) => (
+                        <button
+                          key={size}
+                          onClick={() => {
+                            setSelectedSize(size);
+                            setSelectedColor(null);
+                          }}
+                          className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
+                            selectedSize === size
+                              ? "bg-orange-500 text-white border-orange-500"
+                              : "bg-white text-gray-800 border-gray-300 hover:border-orange-500"
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      ))
+                    ) : (
+                      <p className="text-gray-500">No sizes available</p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Colors */}
-              <div className="mb-8">
-                <label className="block text-sm font-bold mb-3">Color</label>
-                <div className="flex gap-3 flex-wrap">
-                  {getAvailableColors().length > 0 ? (
-                    getAvailableColors().map((color) => (
-                      <button
-                        key={color}
-                        onClick={() => setSelectedColor(color)}
-                        style={{
-                          backgroundColor: color,
-                          opacity: selectedColor === color ? 1 : 0.7,
-                        }}
-                        className={`w-10 h-10 rounded-full border-3 transition-all ${
-                          selectedColor === color
-                            ? "border-gray-800 scale-110"
-                            : "border-gray-300 hover:opacity-100"
-                        }`}
-                        title={color}
-                      />
-                    ))
-                  ) : (
-                    <p className="text-gray-500">Select a size first</p>
-                  )}
+              {product.category !== "Electronics" && product.category !== "watch" && (
+                <div className="mb-8">
+                  <label className="block text-sm font-bold mb-3">Color</label>
+                  <div className="flex gap-3 flex-wrap">
+                    {getAvailableColors().length > 0 ? (
+                      getAvailableColors().map((color) => (
+                        <button
+                          key={color}
+                          onClick={() => setSelectedColor(color)}
+                          style={{
+                            backgroundColor: color,
+                            opacity: selectedColor === color ? 1 : 0.7,
+                          }}
+                          className={`w-10 h-10 rounded-full border-3 transition-all ${
+                            selectedColor === color
+                              ? "border-gray-800 scale-110"
+                              : "border-gray-300 hover:opacity-100"
+                          }`}
+                          title={color}
+                        />
+                      ))
+                    ) : (
+                      <p className="text-gray-500">Select a size first</p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Add to Cart Button */}
               <button
                 onClick={handleAddToCart}
-                disabled={addingToCart || !selectedSize || !selectedColor}
+                disabled={addingToCart || ((product.category === "Electronics" || product.category === "watch") ? product.totalStock <= 0 : !selectedSize || !selectedColor)}
                 className="w-full bg-orange-500 text-white py-3 rounded-lg font-bold text-lg hover:bg-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {addingToCart ? (
@@ -283,7 +295,7 @@ export default function ProductDetail() {
           </div>
 
           {/* Variants Table */}
-          {product.variants && product.variants.length > 0 && (
+          {product.category !== "Electronics" && product.category !== "watch" && product.variants && product.variants.length > 0 && (
             <div className="mt-8 pt-8 border-t border-gray-200">
               <h3 className="font-bold text-lg mb-4">Available Variants</h3>
               <div className="overflow-x-auto">
